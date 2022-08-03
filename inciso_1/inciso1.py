@@ -1,7 +1,4 @@
 from collections import namedtuple
-from logging.config import valid_ident
-from turtle import done
-from webbrowser import get
 
 def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     """A partir de una una expresion (cadena) en forma de clausula, calcula cuales son los posibles valores de verdad para cada una de las variables (p, q, r...)
