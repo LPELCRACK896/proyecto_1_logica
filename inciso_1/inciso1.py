@@ -3,7 +3,6 @@
 """ Recibe [p, q, r] ,'pqr'"""
 from collections import namedtuple
 
-from numpy import var
 
 
 def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
