@@ -1,5 +1,8 @@
 from collections import namedtuple
 
+def get_variables_from_expression(expression, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
+    return list({char for char in expression if char in alfabeto})
+
 def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     """A partir de una una expresion (cadena) en forma de clausula, calcula cuales son los posibles valores de verdad para cada una de las variables (p, q, r...)
     de las que este compuesta en forma de cadena binaria. Las posibilidades vienen en una lista de cadena binaria en la que 0 es False y 1 True.
@@ -9,15 +12,9 @@ def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
         alfabeto (str, optional): . Defaults to 'abcdefghijklmnopqrstuvwxyz'.
 
     Returns:
-        _type_: list
+        list: Lista de cadenas binarias
     """    
-    cant_variables = 0
-    alf = []
-    for i in cadena:
-        if i in alfabeto and i not in alf:
-            cant_variables += 1
-            alf.append(i)
-    comb = 2**(cant_variables)
+    comb = 2**(len(get_variables_from_expression(cadena, alfabeto)))
     size = len(bin(comb-1)[2:])
     cadenas = []
     for i in range(comb):
@@ -27,7 +24,7 @@ def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
         cadenas.append(cadena)
     return cadenas
 
-def get_tuplas_clausulas_list( cadena, variables  ='abcdefghijklmnopqrstuvwxyz' ):
+def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' ):
     """A partir de una una expresion (cadena) en forma de clausula, transforma la clausula en una lista de tuplas compuesto por una LISTA DE
     TERMINOS que contienen sus terminos ya sea como variables o indices de otras clausulas; NIVEL, indica que tan interna es la clausa respecto 
     a las otras; NEGADO, si el termino en cuestion es negado. 
@@ -88,13 +85,13 @@ def get_tuplas_clausulas_list( cadena, variables  ='abcdefghijklmnopqrstuvwxyz' 
             raise Exception('Error en la cadena')
     return clausulas
 
-def evaluar_clausula(clausula, lista_clausulas, variables_valuadas):
+def evaluar_clausula(clausula, lista_clausulas: list, variables_valuadas):
     """Permite determinar el valor de una clausula. 
 
     Args:
-        clausula (_type_): Tupla con caracteristicas de una clausula. 
-        lista_clausulas (_type_): Clausulas involucradas en la expresion. 
-        variables_valuadas (_type_): Variables involucradas en la expresion. 
+        clausula (list): Tupla con caracteristicas de una clausula. 
+        lista_clausulas (list): Clausulas involucradas en la expresion. 
+        variables_valuadas (dict): Variables involucradas en la expresion. 
 
     Returns:
         bool: Valor de la clausula ingresada. 
@@ -123,6 +120,30 @@ def evaluar_clausula(clausula, lista_clausulas, variables_valuadas):
         return False 
     """
     return operacion=='and'
+    
+def evaluar_expresion(expresion_claus, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
+    """A partir de una expresion brinda los resultados segun se evaluen. De el diccionario resultante es posible ver si es satisfacible
 
-def evaluar_expresion(expresion_claus):
-    pass
+    Args:
+        expresion_claus (_type_): Clausula inicial
+        alfabeto (str, optional): Cadena de letras permitidas como variables dentro de la expresion. Defaults to 'abcdefghijklmnopqrstuvwxyz'.
+
+    Returns:
+        dict: Diccionario con cada cadena binaria y su valor
+    """    
+    cadenas_binarias = calcula_cadenas_binarias(expresion_claus, alfabeto)
+    exp_claus_forma_tuplas = get_tuplas_clausulas_list(expresion_claus, alfabeto)
+    cadenas_resultados = {}
+    variables = get_variables_from_expression(expresion_claus, alfabeto)
+    print(variables)
+    for cadena_b in cadenas_binarias:
+        if len(variables) != len(cadena_b):
+            print("Error inesperado")
+            return
+        dicc = { variables[i]: True if cadena_b[i]=='1' else False for i in range(len(cadena_b))}
+
+        cadenas_resultados[cadena_b] = evaluar_clausula(exp_claus_forma_tuplas[0], exp_claus_forma_tuplas, dicc )
+            
+    return cadenas_resultados#, [cadena for cadena in cadenas_resultados if cadenas_resultados[cadena]=True]
+
+print(evaluar_expresion('{{~p}, {q}}'))
