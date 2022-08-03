@@ -70,7 +70,5 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
             raise Exception('Error en la cadena')
     return clausulas
 
-#get_tuplas_clausulas_list(cadena='~{{p}, {~p, q, r}, {q}}')
-
 def evaluar_expresion(list_tuplas, cadena_binaria):
     pass
