@@ -3,12 +3,20 @@
 """ Recibe [p, q, r] ,'pqr'"""
 from collections import namedtuple
 
+from numpy import var
 
-def calcula_cadenas_binarias(variables):
-    comb = 2**len(variables)
-    size = len(bin(comb)[2:])
+
+def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
+    cant_variables = 0
+    alf = []
+    for i in cadena:
+        if i in alfabeto and i not in alf:
+            cant_variables += 1
+            alf.append(i)
+    comb = 2**(cant_variables)
+    size = len(bin(comb-1)[2:])
     cadenas = []
-    for i in range(comb+1):
+    for i in range(comb):
         cadena = str(bin(i)[2:])
         while size!=len(cadena):
             cadena = '0'+cadena
@@ -17,7 +25,6 @@ def calcula_cadenas_binarias(variables):
 
 CLAUS = namedtuple('Point3', ['terminos', 'nivel', 'negado'])
 def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' ):
-    print(cadena)
     clausulas = []
     nivel = 0
     clausulas_pendientes = -1 #stack
@@ -62,9 +69,9 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
             break
         elif len(cadena)==0:
             raise Exception('Error en la cadena')
-    print(clausulas)
+    return clausulas
 
 #get_tuplas_clausulas_list(cadena='~{{p}, {~p, q, r}, {q}}')
 
-def evaluar_expresion(expresion, cadena_binaria):
+def evaluar_expresion(list_tuplas, cadena_binaria):
     pass
