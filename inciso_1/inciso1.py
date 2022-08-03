@@ -1,14 +1,19 @@
-
-
-""" Recibe [p, q, r] ,'pqr'"""
 from collections import namedtuple
 from logging.config import valid_ident
 from turtle import done
 from webbrowser import get
 
-
-
 def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
+    """A partir de una una expresion (cadena) en forma de clausula, calcula cuales son los posibles valores de verdad para cada una de las variables (p, q, r...)
+    de las que este compuesta en forma de cadena binaria. Las posibilidades vienen en una lista de cadena binaria en la que 0 es False y 1 True.
+
+    Args:
+        cadena (str): Ingresa en un solo string, sin separaciones las variables de la expresion algebraica
+        alfabeto (str, optional): . Defaults to 'abcdefghijklmnopqrstuvwxyz'.
+
+    Returns:
+        _type_: list
+    """    
     cant_variables = 0
     alf = []
     for i in cadena:
@@ -25,8 +30,22 @@ def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
         cadenas.append(cadena)
     return cadenas
 
-def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' ):
-    CLAUS = namedtuple('Point4', ['terminos', 'nivel', 'negado', 'valor'])
+def get_tuplas_clausulas_list( cadena, variables  ='abcdefghijklmnopqrstuvwxyz' ):
+    """A partir de una una expresion (cadena) en forma de clausula, transforma la clausula en una lista de tuplas compuesto por una LISTA DE
+    TERMINOS que contienen sus terminos ya sea como variables o indices de otras clausulas; NIVEL, indica que tan interna es la clausa respecto 
+    a las otras; NEGADO, si el termino en cuestion es negado. 
+
+    Args:
+        cadena (str): Cadena que contiene la clausula. 
+        variables (str, optional): Una cadena de todas las variables esperadas en la epxresion (Ej: 'pqrs'). Defaults to 'abcdefghijklmnopqrstuvwxyz'.
+    Raises:
+        Exception: En caso la expresión no se de de la forma correcta, que la expresión implique niveles negativos de clausulas, se este cerrando una clausula sin haberla abierto, 
+        el ingreso de un caracter que no forme para del alfabeto o sea '{', '}', ',', ' '.  
+
+    Returns:
+        list: Lista con tuplas de cada clausula dentro de la expresion con formato detallado en la descripcion. 
+    """    
+    CLAUS = namedtuple('Clausula', ['terminos', 'nivel', 'negado'])
     clausulas = []
     nivel = 0
     clausulas_pendientes = -1 #stack
@@ -37,7 +56,7 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
         if char=='{': # Apertura
             clausulas_pendientes += 1 
             nivel += 1
-            clausulas.append(CLAUS([], nivel, negado, [None]))
+            clausulas.append(CLAUS([], nivel, negado))
             negado = False
         elif char=='}':#Cierre de clausula
             if clausulas_pendientes<0:
@@ -47,8 +66,7 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
                 index_clausula = clausulas.index(clausulas[-1])
                 nivel -= 1
                 if nivel_inferior<0:
-                    print("error en cadena")
-                    break
+                    raise Exception("Formato incorrecto de clausula")
                 for clausula in clausulas:
                     if clausula.nivel==nivel_inferior:
                         clausula.terminos.append(index_clausula)
@@ -73,13 +91,17 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
             raise Exception('Error en la cadena')
     return clausulas
 
-def evaluar_expresion(list_tuplas, cadena_binaria, variables):
-    if len(cadena_binaria)!=len(variables):
-        raise Exception("Hubo un error al ingresar las variables involucradas")
-    variables_valuadas = { variables[i]: True if cadena_binaria[i]=='1' else False for i in range(len(cadena_binaria))}
-    #list_tuplas[0].valor[0] = False
-
 def evaluar_clausula(clausula, lista_clausulas, variables_valuadas):
+    """Permite determinar el valor de una clausula. 
+
+    Args:
+        clausula (_type_): Tupla con caracteristicas de una clausula. 
+        lista_clausulas (_type_): Clausulas involucradas en la expresion. 
+        variables_valuadas (_type_): Variables involucradas en la expresion. 
+
+    Returns:
+        bool: Valor de la clausula ingresada. 
+    """    
     operacion = 'and' if clausula.nivel ==1 else 'or'
     valuadas = []
     for termino in clausula.terminos:
@@ -105,6 +127,5 @@ def evaluar_clausula(clausula, lista_clausulas, variables_valuadas):
     """
     return operacion=='and'
 
-print(evaluar_clausula(get_tuplas_clausulas_list('{{~p}, {q}}')[0], get_tuplas_clausulas_list('{{p}, {q}}'), {'p': 0, 'q': 1}))
-def verifica_si_es_satisfactible(expresion):
+def evaluar_expresion(expresion_claus):
     pass
