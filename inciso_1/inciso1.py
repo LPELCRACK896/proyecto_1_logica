@@ -15,8 +15,6 @@ def calcula_cadenas_binarias(variables):
         cadenas.append(cadena)
     return cadenas
 
-
-
 CLAUS = namedtuple('Point3', ['terminos', 'nivel', 'negado'])
 def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' ):
     print(cadena)
