@@ -10,7 +10,7 @@ while True:
             etc...
          """
         exp = input("Ingresar expresion booleana en forma clausulal\n")
-        inc.evaluar_expresion(exp)
+        resultado = inc.evaluar_expresion(exp)
     elif res == '2':
         break
     else:
