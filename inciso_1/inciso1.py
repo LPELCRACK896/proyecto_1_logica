@@ -2,7 +2,6 @@ from collections import namedtuple
 
 def get_variables_from_expression(expression, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     return list({char for char in expression if char in alfabeto})
-
 def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     """A partir de una una expresion (cadena) en forma de clausula, calcula cuales son los posibles valores de verdad para cada una de las variables (p, q, r...)
     de las que este compuesta en forma de cadena binaria. Las posibilidades vienen en una lista de cadena binaria en la que 0 es False y 1 True.
@@ -46,7 +45,6 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
     negado = False
     while True:
         char = cadena[0]
-
         if char=='{': # Apertura
             clausulas_pendientes += 1 
             nivel += 1
@@ -75,7 +73,7 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
                 clausulas[-1].terminos.append(char if not negado else '~'+char)
                 negado = False  
             elif char==',' or char==' ':
-                pass
+                pass # {{p}, {q} }
             else:
                 raise Exception("Error en caracter")
         cadena = cadena[1:]
@@ -135,7 +133,6 @@ def evaluar_expresion(expresion_claus, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     exp_claus_forma_tuplas = get_tuplas_clausulas_list(expresion_claus, alfabeto)
     cadenas_resultados = {}
     variables = get_variables_from_expression(expresion_claus, alfabeto)
-    print(variables)
     for cadena_b in cadenas_binarias:
         if len(variables) != len(cadena_b):
             print("Error inesperado")
@@ -143,7 +140,13 @@ def evaluar_expresion(expresion_claus, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
         dicc = { variables[i]: True if cadena_b[i]=='1' else False for i in range(len(cadena_b))}
 
         cadenas_resultados[cadena_b] = evaluar_clausula(exp_claus_forma_tuplas[0], exp_claus_forma_tuplas, dicc )
-            
-    return cadenas_resultados#, [cadena for cadena in cadenas_resultados if cadenas_resultados[cadena]=True]
+    satisfacible = []
+    for cadena in cadenas_resultados:
+        if cadenas_resultados[cadena]==True:
+            satisfacible.append({variables[char] : cadena[char] for char in range(len(cadena)) })
+    if len(satisfacible) == len(cadenas_resultados):
+        print("Es tautologia")
+    elif len(satisfacible)==0:
+        print("Es contradiccion")
+    return satisfacible if len(satisfacible)>0 else False #, [cadena for cadena in cadenas_resultados if cadenas_resultados[cadena]=True]
 
-print(evaluar_expresion('{{~p}, {q}}'))
