@@ -2,6 +2,7 @@ from collections import namedtuple
 
 def get_variables_from_expression(expression, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     return list({char for char in expression if char in alfabeto})
+
 def calcula_cadenas_binarias(cadena, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     """A partir de una una expresion (cadena) en forma de clausula, calcula cuales son los posibles valores de verdad para cada una de las variables (p, q, r...)
     de las que este compuesta en forma de cadena binaria. Las posibilidades vienen en una lista de cadena binaria en la que 0 es False y 1 True.
@@ -144,9 +145,9 @@ def evaluar_expresion(expresion_claus, alfabeto = 'abcdefghijklmnopqrstuvwxyz'):
     for cadena in cadenas_resultados:
         if cadenas_resultados[cadena]==True:
             satisfacible.append({variables[char] : cadena[char] for char in range(len(cadena)) })
+            #break #Para que solo muestre un resultado que hace satisfacible 
     if len(satisfacible) == len(cadenas_resultados):
         print("Es tautologia")
     elif len(satisfacible)==0:
         print("Es contradiccion")
     return satisfacible if len(satisfacible)>0 else False #, [cadena for cadena in cadenas_resultados if cadenas_resultados[cadena]=True]
-
