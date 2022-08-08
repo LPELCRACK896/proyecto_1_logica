@@ -29,6 +29,8 @@ def generate_BC(Blist, lit):
     return Blist
 
 
+# Algoritmo davis-putnam-logemann-loveland
+# Devuelve una tupla (exito, asignaciones) indicando si la formula es satisfacible
 def DPLL(formula, asignaciones={}):
     # caso base
     if len(formula) == 0:
@@ -36,40 +38,27 @@ def DPLL(formula, asignaciones={}):
     if any([len(c) == 0 for c in formula]) > 0:
         return False, None
     l = random_literal(formula)
-    new_cnf = [clausula for clausula in formula if (l, True) not in clausula] # No incluir la clausula si contiene (l, True)
-    new_cnf = [clausula.difference({(l, False)}) for clausula in new_cnf] # Eliminar el valor negado de l de las otras clausulas
+    new_cnf = []
+    for clausula in formula:
+        if (l, True) not in clausula: new_cnf.append(clausula)
+    for i in range(len(new_cnf)):
+        c = clausula.difference({(l, False)})
+        new_cnf[i] = c
+
     sat, vals = DPLL(new_cnf, {**asignaciones, **{l: True}})
     if sat:
         return sat, vals
-    new_cnf = [clausula for clausula in formula if (l, False) not in clausula]
-    new_cnf = [c.difference({(l, True)}) for c in new_cnf]
+    new_cnf = []
+    for clausula in formula:
+        if (l, False) not in clausula: new_cnf.append(clausula)
+    for i in range(len(new_cnf)):
+        c = clausula.difference({(l, True)})
+        new_cnf[i] = c
     sat, vals = DPLL(new_cnf, {**asignaciones, **{l: False}})
     if sat:
         return sat, vals
-
     return False, None
 
-def dpll(cnf, assignments={}):
-    if len(cnf) == 0:
-        return True, assignments
-
-    if any([len(c) == 0 for c in cnf]):
-        return False, None
-
-    l = random_literal(cnf)
-
-    new_cnf = [c for c in cnf if (l, True) not in c]
-    new_cnf = [c.difference({(l, False)}) for c in new_cnf]
-    sat, vals = dpll(new_cnf, {**assignments, **{l: True}})
-    if sat:
-        return sat, vals
-    new_cnf = [c for c in cnf if (l, False) not in c]
-    new_cnf = [c.difference({(l, True)}) for c in new_cnf]
-    sat, vals = dpll(new_cnf, {**assignments, **{l: False}})
-    if sat:
-        return sat, vals
-
-    return False, None
 
 
 
