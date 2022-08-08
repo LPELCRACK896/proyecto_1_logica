@@ -38,9 +38,11 @@ def DPLL(formula, asignaciones={}):
     if any([len(c) == 0 for c in formula]) > 0:
         return False, None
     l = random_literal(formula)
+    # Intentar siguiendo la rama positiva
     new_cnf = []
     for clausula in formula:
-        if (l, True) not in clausula: new_cnf.append(clausula)
+        if (l, True) not in clausula:
+            new_cnf.append(clausula)
     for i in range(len(new_cnf)):
         c = clausula.difference({(l, False)})
         new_cnf[i] = c
@@ -48,11 +50,14 @@ def DPLL(formula, asignaciones={}):
     sat, vals = DPLL(new_cnf, {**asignaciones, **{l: True}})
     if sat:
         return sat, vals
+
+    # Intentar otra vez pero siguiendo la rama negativa
     new_cnf = []
     for clausula in formula:
-        if (l, False) not in clausula: new_cnf.append(clausula)
+        if (l, False) not in clausula:
+            new_cnf.append(clausula)
     for i in range(len(new_cnf)):
-        c = clausula.difference({(l, True)})
+        c = clausula.difference({(l, False)})
         new_cnf[i] = c
     sat, vals = DPLL(new_cnf, {**asignaciones, **{l: False}})
     if sat:
@@ -60,6 +65,7 @@ def DPLL(formula, asignaciones={}):
     return False, None
 
 
+# in: [[p],[~p, ~q]]
+# respuesta: p tiene que ser true y q tiene que ser false
+print(DPLL([{("p", True)}, {("p", False), ("q", False)}]))
 
-
-print(DPLL([{("p", True), ("q", False)}, {("p", True), ("r", True)}]))
