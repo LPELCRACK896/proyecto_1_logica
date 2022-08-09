@@ -2,31 +2,11 @@
 import random
 
 
-def get_literals(B_):
-    B_list = [i for sub in B_ for i in sub]
-    print(B_list)
-    no_neg = [*set((B_list[i], True) if len(B_list[i]) < 2
-                   else (B_list[i][1:], False)
-                   for i in range(len(B_list)))]
-    return no_neg
-
-# def formula_to_literals(formula):
-
 
 def random_literal(formula):
     for clausula in formula:
         for literal in clausula:
             return literal[0]
-
-def generate_BC(Blist, lit):
-    litComp = '~' + lit if len(lit) == 1 else lit[1:]
-    for j in Blist:
-        if litComp in j:
-            j.remove(litComp)
-    for k in Blist:
-        if lit in k:
-            Blist.remove(k)
-    return Blist
 
 
 # Algoritmo davis-putnam-logemann-loveland
@@ -44,9 +24,7 @@ def DPLL(formula, asignaciones={}):
         if (l, True) not in clausula:
             new_cnf.append(clausula)
     for i in range(len(new_cnf)):
-        c = clausula.difference({(l, False)})
-        new_cnf[i] = c
-
+        new_cnf[i] = new_cnf[i].difference({(l, False)})
     sat, vals = DPLL(new_cnf, {**asignaciones, **{l: True}})
     if sat:
         return sat, vals
@@ -57,15 +35,13 @@ def DPLL(formula, asignaciones={}):
         if (l, False) not in clausula:
             new_cnf.append(clausula)
     for i in range(len(new_cnf)):
-        c = clausula.difference({(l, False)})
-        new_cnf[i] = c
+        new_cnf[i] = new_cnf[i].difference({(l, True)})
     sat, vals = DPLL(new_cnf, {**asignaciones, **{l: False}})
     if sat:
         return sat, vals
     return False, None
 
 
-# in: [[p],[~p, ~q]]
-# respuesta: p tiene que ser true y q tiene que ser false
-DPLL([{("p", True)}, {("p", False)}])
+
+
 

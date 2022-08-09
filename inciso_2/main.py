@@ -19,12 +19,13 @@ print(i2.DPLL([{("p", False), ("q", False)},
                {("q", False), ("s", True)}]))
 
 print("\n(~p V ~q V ~r) ∧ (q V ~r V p) ∧ (~p V q V r)")
-print(i2.DPLL([{("p", False), ("q", False), ("r", False)}, 
+
+print(i2.DPLL([{("p", False), ("q", False), ("r", False)},
                {("q", True), ("r", False), ("p", True)},
                {("p", False), ("q", True), ("r", True)}]))
 
 print("\nr ∧ (~q V ~r) ∧ (~p V q V ~r) ∧ q")
-print(i2.DPLL([{("r", True)}, 
+print(i2.DPLL([{("r", True)},
                {("q", False), ("r", False)}, 
                {("p", False), ("q", True), ("r", False)},
                {("q", True)}]))
