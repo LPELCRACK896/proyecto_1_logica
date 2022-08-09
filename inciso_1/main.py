@@ -1,6 +1,6 @@
 import inciso1 as inc
 import pandas as pd
-expresiones =["{{p},{~q}}","{{q,p,~p}}","{{~p,~r,~s},{~q,~p,~s}}","{{~p,~q},{q,~s},{~p,s},{~q,s}}","{{~p,~q,~r},{q,~r,p},{~p,q,r}}","{{r},{~q,~r},{~p,q,~r},{q}}"]
+expresiones =["{{~p,~q,~r},{q,~r,p},{~p,q,r}}", "{{r},{~q,~r},{~p,q,~r},{q}}"]
 
 def formatRes(resultado):
     print("\nCombinaciones que la hacen satisfacibles: ")
@@ -16,7 +16,7 @@ def formatRes(resultado):
 
 def simulacion(expresiones: list):
     for r in expresiones:
-        print("Expresion evaluada: {r}\n")
+        print(f"Expresion evaluada: {r}\n")
         input("Ver resultado... ")
         resultado = inc.evaluar_expresion(r)
         if resultado:
@@ -26,7 +26,7 @@ def simulacion(expresiones: list):
         input("Siguiente expresion...\n")
 
 while True:
-    res = input("1. Ingresar expresion boolean en forma clausulal \n3. Salir\n")
+    res = input("1. Ingresar expresion boolean en forma clausulal \n2. Simulacion\n3. Salir\n")
     if res == '1':
         exp = input("Ingresar expresion booleana en forma clausulal\n")
         resultado = inc.evaluar_expresion(exp)

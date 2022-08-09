@@ -73,9 +73,7 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
                     raise Exception("Error en la cadena")
                 clausulas[-1].terminos.append(char if not negado else '~'+char)
                 negado = False  
-            elif char==',' or char==' ':
-                pass # {{p}, {q} }
-            else:
+            elif not (char==',' or char==' '):
                 raise Exception("Error en caracter")
         cadena = cadena[1:]
         if clausulas_pendientes<0 and not negado:
