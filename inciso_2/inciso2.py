@@ -67,5 +67,5 @@ def DPLL(formula, asignaciones={}):
 
 # in: [[p],[~p, ~q]]
 # respuesta: p tiene que ser true y q tiene que ser false
-print(DPLL([{("p", True)}, {("p", False), ("q", False)}]))
+print(DPLL([{("p", True)}, {("p", False)}]))
 
