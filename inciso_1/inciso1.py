@@ -44,7 +44,8 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
     nivel = 0
     clausulas_pendientes = -1 #stack
     negado = False
-    while True:
+    salir = False
+    while not salir:
         char = cadena[0]
         if char=='{': # Apertura
             clausulas_pendientes += 1 
@@ -77,7 +78,7 @@ def get_tuplas_clausulas_list(cadena, variables  ='abcdefghijklmnopqrstuvwxyz' )
                 raise Exception("Error en caracter")
         cadena = cadena[1:]
         if clausulas_pendientes<0 and not negado:
-            break
+            salir = True
         elif len(cadena)==0:
             raise Exception('Error en la cadena')
     return clausulas

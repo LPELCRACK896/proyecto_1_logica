@@ -24,8 +24,8 @@ def simulacion(expresiones: list):
         else:
             print("La expresion no es satisfacible")
         input("Siguiente expresion...\n")
-
-while True:
+salir = False
+while not salir:
     res = input("1. Ingresar expresion boolean en forma clausulal \n2. Simulacion\n3. Salir\n")
     if res == '1':
         exp = input("Ingresar expresion booleana en forma clausulal\n")
@@ -36,6 +36,6 @@ while True:
         simulacion(expresiones)
         input("Enter para regresar el menu")
     elif res == '3':
-        break
+        salir = True
     else:
         print("Ingrese una opcion valida")
